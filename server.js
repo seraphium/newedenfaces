@@ -3,6 +3,10 @@ var path = require('path');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
 
+var mongoose = require('mongoose');
+var Character = require('./models/character');
+var config = require('./config');
+
 // Babel ES6/JSX Compiler
 require('babel-register');
 
@@ -12,6 +16,13 @@ var ReactDOM = require('react-dom/server');
 var Router = require('react-router');
 var routes = require('./app/routes');
 
+// DB connection
+mongoose.connect(config.database);
+mongoose.connection.on('error', function() {
+    console.info('Error: Could not connect to MongoDB. Did you forget to run `mongod`?');
+});
+
+//Express
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
